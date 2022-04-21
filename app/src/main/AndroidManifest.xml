@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.upn.chapanomas">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ChapaNomas">
+        <activity
+            android:name=".activitys.conductor.MapConductorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activitys.cliente.MapClienteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activitys.conductor.RegisterConductorActivity"
+            android:exported="false"
+            android:parentActivityName=".activitys.SelectOptionAuthActivity" />
+        <activity
+            android:name=".activitys.LoginActivity"
+            android:exported="false"
+            android:parentActivityName=".activitys.SelectOptionAuthActivity" />
+        <activity
+            android:name=".activitys.cliente.RegisterClienteActivity"
+            android:exported="false"
+            android:parentActivityName=".activitys.SelectOptionAuthActivity" />
+        <activity
+            android:name=".activitys.SelectOptionAuthActivity"
+            android:exported="false"
+            android:parentActivityName=".activitys.MainActivity" />
+        <activity
+            android:name=".activitys.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

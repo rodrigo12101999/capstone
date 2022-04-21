@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "201996463750",
+    "project_id": "chapanomas-fb2a0",
+    "storage_bucket": "chapanomas-fb2a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:201996463750:android:f168a5f305833bca6f6b07",
+        "android_client_info": {
+          "package_name": "com.upn.chapanomas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "201996463750-2tiuah0tkhp4bov1767v80cg3t6gv2l3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.upn.chapanomas",
+            "certificate_hash": "e0a880db742f7ac0613ec3d01cc73aa9892891d5"
+          }
+        },
+        {
+          "client_id": "201996463750-pfoj1ucon9c506jiroefh2futtasuan7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYbmDfFZGdNcXcuZb326HZ82vP-iXJIR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "201996463750-pfoj1ucon9c506jiroefh2futtasuan7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
