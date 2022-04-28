@@ -15,8 +15,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.upn.chapanomas.R;
-import com.upn.chapanomas.activitys.conductor.MapConductorActivity;
-import com.upn.chapanomas.activitys.conductor.RegisterConductorActivity;
 import com.upn.chapanomas.clases.Cliente;
 import com.upn.chapanomas.includes.MyToolbar;
 import com.upn.chapanomas.providers.AuthProovider;
@@ -93,7 +91,7 @@ public class RegisterClienteActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Intent intent = new Intent(RegisterClienteActivity.this, MapClienteActivity.class);
+                    Intent intent = new Intent(RegisterClienteActivity.this, MapClientActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }else{

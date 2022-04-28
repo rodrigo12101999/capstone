@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".activitys.cliente.MapClienteActivity">
+    tools:context=".activitys.cliente.MapClientActivity">
 
-    <Button
-        android:id="@+id/btnLogout"
+    <include layout="@layout/action_bar_toolbar" />
+
+    <fragment
+        android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cerrar sesión cliente" >
-
-    </Button>
+        android:layout_height="match_parent"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2165" />
+        <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/drawable/ic_file.xml" value="0.354" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/drawable/ic_placa_moto.xml" value="0.354" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/drawable/ic_tipo_moto.xml" value="0.354" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/drawable/rounded_buttom.xml" value="0.1455" />
@@ -10,11 +12,12 @@
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/action_bar_toolbar.xml" value="0.14722222222222223" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_map_cliente.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_map_cliente.xml" value="0.2" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_map_conductor.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_register.xml" value="0.358695652173913" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_register_conductor.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_select_option_auth.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/menu/conductor_menu.xml" value="0.2520833333333333" />
       </map>
     </option>
   </component>

@@ -1,11 +1,11 @@
-package com.upn.chapanomas.activitys.conductor;
+package com.upn.chapanomas.activitys.cliente;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
 
 import android.Manifest;
 import android.content.Context;
@@ -23,24 +23,21 @@ import android.view.MenuItem;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.upn.chapanomas.R;
 import com.upn.chapanomas.activitys.MainActivity;
 import com.upn.chapanomas.includes.MyToolbar;
 import com.upn.chapanomas.providers.AuthProovider;
 
-public class MapConductorActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapClientActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap map;
     private SupportMapFragment mapFragment;
@@ -52,7 +49,6 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
     private final static int LOCATION_REQUEST_CODE = 1;
     private final static int SETTINGS_REQUEST_CODE = 2;
 
-    private Marker marker;
 
     LocationCallback locationCallback = new LocationCallback() {
         @Override
@@ -65,12 +61,6 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
                                     .zoom(15f)
                                     .build()
                     ));
-                    marker = map.addMarker(new MarkerOptions().position(
-                            new LatLng(location.getLatitude(), location.getLongitude())
-                            )
-                            .title("Tu posición")
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_moto))
-                    );
                 }
             }
         }
@@ -79,13 +69,13 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_conductor);
+        setContentView(R.layout.activity_map_cliente);
 
-        MyToolbar.show(this, "Conductor", false);
-
-        authProovider = new AuthProovider();
+        MyToolbar.show(this, "Cliente", false);
 
         fusedLocation = LocationServices.getFusedLocationProviderClient(this);
+
+        authProovider = new AuthProovider();
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -98,10 +88,6 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
         map = googleMap;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.getUiSettings().setZoomControlsEnabled(true);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        map.setMyLocationEnabled(true);
 
         locationRequest = new LocationRequest();
         locationRequest.setInterval(1000);
@@ -122,7 +108,7 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
                     if(gpsActive()){
                         fusedLocation.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
                     }else{
-                           showAlertDialogNOGPS();
+                        showAlertDialogNOGPS();
                     }
                 } else {
                     checkLocationPermissions();
@@ -199,13 +185,13 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                ActivityCompat.requestPermissions(MapConductorActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+                                ActivityCompat.requestPermissions(MapClientActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
                             }
                         })
                         .create()
                         .show();
             }else{
-                ActivityCompat.requestPermissions(MapConductorActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+                ActivityCompat.requestPermissions(MapClientActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
             }
         }
     }
@@ -230,7 +216,7 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
 
     void logout(){
         authProovider.logout();
-        Intent intent = new Intent(MapConductorActivity.this, MainActivity.class);
+        Intent intent = new Intent(MapClientActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }

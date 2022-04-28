@@ -18,9 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.upn.chapanomas.R;
-import com.upn.chapanomas.activitys.cliente.MapClienteActivity;
+import com.upn.chapanomas.activitys.cliente.MapClientActivity;
 import com.upn.chapanomas.activitys.conductor.MapConductorActivity;
-import com.upn.chapanomas.activitys.conductor.RegisterConductorActivity;
 import com.upn.chapanomas.includes.MyToolbar;
 
 public class LoginActivity extends AppCompatActivity {
@@ -70,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             String usuario = pref.getString("usuario", "");
                             if(usuario.equals("cliente")){
-                                Intent intent = new Intent(LoginActivity.this, MapClienteActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, MapClientActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                             }else{

@@ -10,7 +10,7 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.upn.chapanomas.R;
-import com.upn.chapanomas.activitys.cliente.MapClienteActivity;
+import com.upn.chapanomas.activitys.cliente.MapClientActivity;
 import com.upn.chapanomas.activitys.conductor.MapConductorActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             String usuario = pref.getString("usuario", "");
             if(usuario.equals("cliente")){
-                Intent intent = new Intent(MainActivity.this, MapClienteActivity.class);
+                Intent intent = new Intent(MainActivity.this, MapClientActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }else{
