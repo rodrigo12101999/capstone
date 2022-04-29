@@ -20,6 +20,9 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -35,16 +38,19 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.upn.chapanomas.R;
 import com.upn.chapanomas.activitys.MainActivity;
 import com.upn.chapanomas.includes.MyToolbar;
 import com.upn.chapanomas.providers.AuthProovider;
+import com.upn.chapanomas.providers.GeofireProvider;
 
 public class MapConductorActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap map;
     private SupportMapFragment mapFragment;
     private AuthProovider authProovider;
+    private GeofireProvider geofireProvider;
 
     private LocationRequest locationRequest;
     private FusedLocationProviderClient fusedLocation;
@@ -54,23 +60,39 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
 
     private Marker marker;
 
+    private Button btnConectar;
+
+    private boolean conectado = false;
+
+    private LatLng currentLatLng;
+
     LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             for (Location location : locationResult.getLocations()) {
                 if (getApplicationContext() != null) {
-                    map.moveCamera(CameraUpdateFactory.newCameraPosition(
-                            new CameraPosition.Builder()
-                                    .target(new LatLng(location.getLatitude(), location.getLongitude()))
-                                    .zoom(15f)
-                                    .build()
-                    ));
+
+                    currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                    if(marker != null){
+                        marker.remove();
+                    }
+
                     marker = map.addMarker(new MarkerOptions().position(
                             new LatLng(location.getLatitude(), location.getLongitude())
                             )
-                            .title("Tu posición")
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_moto))
+                                    .title("Tu posición")
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_moto))
                     );
+
+                    map.moveCamera(CameraUpdateFactory.newCameraPosition(
+                            new CameraPosition.Builder()
+                                    .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                                    .zoom(18f)
+                                    .build()
+                    ));
+
+                    updateLocation();
                 }
             }
         }
@@ -84,11 +106,32 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
         MyToolbar.show(this, "Conductor", false);
 
         authProovider = new AuthProovider();
+        geofireProvider = new GeofireProvider();
 
         fusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        btnConectar = findViewById(R.id.btnConectar);
+        btnConectar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(conectado){
+                    disconnect();
+                }else{
+                    startLocation();
+                }
+            }
+        });
+
+    }
+
+    private void updateLocation(){
+
+        if(authProovider.existSession() && currentLatLng != null ){
+            geofireProvider.saveLocation(authProovider.getId(),currentLatLng);
+        }
 
     }
 
@@ -98,10 +141,6 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
         map = googleMap;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.getUiSettings().setZoomControlsEnabled(true);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        map.setMyLocationEnabled(true);
 
         locationRequest = new LocationRequest();
         locationRequest.setInterval(1000);
@@ -109,7 +148,6 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setSmallestDisplacement(5);
 
-        startLocation();
     }
 
     @Override
@@ -170,10 +208,28 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
                 .show();
     }
 
+    private void disconnect() {
+
+        if(fusedLocation != null){
+            btnConectar.setText("Conectarse");
+            conectado = false;
+            fusedLocation.removeLocationUpdates(locationCallback);
+
+            if(authProovider.existSession()){
+                geofireProvider.removeLocation(authProovider.getId());
+            }
+        }else{
+            Toast.makeText(this,"No te puedes desconectar", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     private void startLocation(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                 if(gpsActive()){
+                    btnConectar.setText("Desconectarse");
+                    conectado = true;
                     fusedLocation.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
                 }else{
                     showAlertDialogNOGPS();
@@ -229,6 +285,7 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
     }
 
     void logout(){
+        disconnect();
         authProovider.logout();
         Intent intent = new Intent(MapConductorActivity.this, MainActivity.class);
         startActivity(intent);

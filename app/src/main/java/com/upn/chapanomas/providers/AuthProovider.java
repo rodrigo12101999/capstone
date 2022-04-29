@@ -23,4 +23,16 @@ public class AuthProovider {
     public void logout(){
         Auth.signOut();
     }
+
+    public String getId(){
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
+
+    public boolean existSession(){
+        boolean exist = false;
+        if(Auth.getCurrentUser() != null){
+            exist = true;
+        }
+        return exist;
+    }
 }

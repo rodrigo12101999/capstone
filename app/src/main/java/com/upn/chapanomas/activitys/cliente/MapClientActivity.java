@@ -21,6 +21,8 @@ import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -30,12 +32,20 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DatabaseError;
 import com.upn.chapanomas.R;
 import com.upn.chapanomas.activitys.MainActivity;
 import com.upn.chapanomas.includes.MyToolbar;
 import com.upn.chapanomas.providers.AuthProovider;
+import com.upn.chapanomas.providers.GeofireProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapClientActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -46,21 +56,49 @@ public class MapClientActivity extends AppCompatActivity implements OnMapReadyCa
     private LocationRequest locationRequest;
     private FusedLocationProviderClient fusedLocation;
 
+    private GeofireProvider geofireProvider;
+
     private final static int LOCATION_REQUEST_CODE = 1;
     private final static int SETTINGS_REQUEST_CODE = 2;
 
+    private Marker marker;
+
+    private LatLng currentLatLng;
+
+    private List<Marker> driversMarkers = new ArrayList<>();
+
+    private boolean primeraVez = true;
 
     LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             for (Location location : locationResult.getLocations()) {
                 if (getApplicationContext() != null) {
+
+                    if(marker != null){
+                        marker.remove();
+                    }
+
+                    currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                    marker = map.addMarker(new MarkerOptions().position(
+                            new LatLng(location.getLatitude(), location.getLongitude())
+                            )
+                                    .title("Tu posición")
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_ubicacion))
+                    );
+
                     map.moveCamera(CameraUpdateFactory.newCameraPosition(
                             new CameraPosition.Builder()
                                     .target(new LatLng(location.getLatitude(), location.getLongitude()))
                                     .zoom(15f)
                                     .build()
                     ));
+
+                    if(primeraVez){
+                        primeraVez = false;
+                        getActiveDrivers();
+                    }
                 }
             }
         }
@@ -73,13 +111,67 @@ public class MapClientActivity extends AppCompatActivity implements OnMapReadyCa
 
         MyToolbar.show(this, "Cliente", false);
 
-        fusedLocation = LocationServices.getFusedLocationProviderClient(this);
-
         authProovider = new AuthProovider();
+        geofireProvider = new GeofireProvider();
+        fusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+    }
+
+    private void getActiveDrivers(){
+        geofireProvider.getActiveDrivers(currentLatLng).addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
+                for(Marker marker: driversMarkers){
+                    if(marker.getTag() != null){
+                        if(marker.getTag().equals(key)){
+                            return;
+                        }
+                    }
+                }
+
+                LatLng driverLatLng = new LatLng(location.latitude, location.longitude);
+                Marker marker = map.addMarker(new MarkerOptions().position(driverLatLng).title("Conductor Disponible").icon(BitmapDescriptorFactory.fromResource(R.drawable.icono_moto)));
+                marker.setTag(key);
+                driversMarkers.add(marker);
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+                for(Marker marker: driversMarkers){
+                    if(marker.getTag() != null){
+                        if(marker.getTag().equals(key)){
+                            marker.remove();
+                            driversMarkers.remove(marker);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+                for(Marker marker: driversMarkers){
+                    if(marker.getTag() != null){
+                        if(marker.getTag().equals(key)){
+                            marker.setPosition(new LatLng(location.latitude, location.longitude));
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
