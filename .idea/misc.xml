@@ -12,7 +12,7 @@
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/action_bar_toolbar.xml" value="0.14722222222222223" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_map_cliente.xml" value="0.2" />
+        <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_map_cliente.xml" value="0.12" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_map_conductor.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_register.xml" value="0.358695652173913" />
         <entry key="..\:/Users/Rodrigo/AndroidStudioProjects/ChapaNomas/app/src/main/res/layout/activity_register_conductor.xml" value="0.36666666666666664" />
@@ -26,5 +26,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.12" />
+      </ProjectState>
+    </option>
   </component>
 </project>

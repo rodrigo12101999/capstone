@@ -9,10 +9,30 @@
 
     <include layout="@layout/action_bar_toolbar" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
+        android:layout_height="match_parent" />
+
+    <androidx.cardview.widget.CardView
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_margin="20dp"
+        android:background="@color/white"
+        app:cardCornerRadius="20dp"
+        >
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/placeaAutocompleteOrigin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            tools:layout="@layout/places_autocomplete_fragment" />
+
+    </androidx.cardview.widget.CardView>
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
