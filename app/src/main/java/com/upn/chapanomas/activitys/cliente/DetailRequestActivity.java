@@ -1,8 +1,5 @@
 package com.upn.chapanomas.activitys.cliente;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,7 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.location.LocationRequest;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -108,6 +107,12 @@ public class DetailRequestActivity extends AppCompatActivity implements OnMapRea
 
     private void goToRequestDriver() {
         Intent intent = new Intent(DetailRequestActivity.this, RequestDriverActivity.class);
+        intent.putExtra("origin_lat", originLatLng.latitude);
+        intent.putExtra("origin_lng", originLatLng.longitude);
+        intent.putExtra("origin", ExtraOrigin);
+        intent.putExtra("destination", ExtraDestination);
+        intent.putExtra("destination_lat", destinationLatLng.latitude);
+        intent.putExtra("destination_lng", destinationLatLng.longitude);
         startActivity(intent);
         finish();
     }

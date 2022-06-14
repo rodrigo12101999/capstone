@@ -1,12 +1,5 @@
 package com.upn.chapanomas.activitys.conductor;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AlertDialog;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,10 +17,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,12 +38,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.upn.chapanomas.R;
 import com.upn.chapanomas.activitys.MainActivity;
 import com.upn.chapanomas.includes.MyToolbar;
 import com.upn.chapanomas.providers.AuthProovider;
 import com.upn.chapanomas.providers.GeofireProvider;
+import com.upn.chapanomas.providers.TokenProvider;
 
 public class MapConductorActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -51,6 +51,7 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
     private SupportMapFragment mapFragment;
     private AuthProovider authProovider;
     private GeofireProvider geofireProvider;
+    private TokenProvider tokenProvider;
 
     private LocationRequest locationRequest;
     private FusedLocationProviderClient fusedLocation;
@@ -107,6 +108,7 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
 
         authProovider = new AuthProovider();
         geofireProvider = new GeofireProvider();
+        tokenProvider = new TokenProvider();
 
         fusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
@@ -125,6 +127,7 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
             }
         });
 
+        generateToken();
     }
 
     private void updateLocation(){
@@ -290,5 +293,9 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
         Intent intent = new Intent(MapConductorActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    void generateToken(){
+        tokenProvider.create(authProovider.getId());
     }
 }
