@@ -145,7 +145,7 @@ public class MapClientActivity extends AppCompatActivity implements OnMapReadyCa
         MyToolbar.show(this, "Cliente", false);
 
         authProovider = new AuthProovider();
-        geofireProvider = new GeofireProvider();
+        geofireProvider = new GeofireProvider("conductor_activo");
         tokenProvider = new TokenProvider();
         fusedLocation = LocationServices.getFusedLocationProviderClient(this);
 

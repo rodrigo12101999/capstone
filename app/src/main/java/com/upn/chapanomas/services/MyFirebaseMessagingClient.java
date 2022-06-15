@@ -13,11 +13,16 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.upn.chapanomas.R;
 import com.upn.chapanomas.channel.NotificationHelper;
+import com.upn.chapanomas.receivers.AcceptReceiver;
+import com.upn.chapanomas.receivers.CancelReceiver;
 
 import java.util.Map;
 
 public class MyFirebaseMessagingClient extends FirebaseMessagingService {
+
+    private static final int NOTIFICATION_CODE = 100;
 
     @Override
     public void onNewToken(@NonNull String s) {
@@ -34,9 +39,19 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
 
         if(title != null){
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                showNotificationApiOreo(title, body);
+                if(title.contains("Solicitud de servicio a")){
+                    String idClient = data.get("idClient");
+                    showNotificationApiOreoAcitons(title, body, idClient);
+                }else{
+                    showNotificationApiOreo(title, body);
+                }
             }else{
-                showNotification(title, body);
+                if(title.contains("Solicitud de servicio a")){
+                    String idClient = data.get("idClient");
+                    showNotificationActions(title, body, idClient);
+                }else{
+                    showNotification(title, body);
+                }
             }
         }
     }
@@ -50,11 +65,70 @@ public class MyFirebaseMessagingClient extends FirebaseMessagingService {
         notificationHelper.getManager().notify(1, builder.build());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void showNotificationApiOreoAcitons(String title, String body, String idClient) {
+        //ACEPTAR
+        Intent acceptIntent = new Intent(this, AcceptReceiver.class);
+        acceptIntent.putExtra("idClient", idClient);
+        PendingIntent acceptPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification.Action acceptAction = new Notification.Action.Builder(
+                R.mipmap.ic_launcher,
+                "Aceptar",
+                acceptPendingIntent
+        ).build();
+
+        //CANCELAR
+        Intent cancelIntent = new Intent(this, CancelReceiver.class);
+        cancelIntent.putExtra("idClient", idClient);
+        PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification.Action cancelAction = new Notification.Action.Builder(
+                R.mipmap.ic_launcher,
+                "Cancelar",
+                cancelPendingIntent
+        ).build();
+
+        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationHelper notificationHelper = new NotificationHelper(getBaseContext());
+        Notification.Builder builder = notificationHelper.getNotificationActions(title, body, sound, acceptAction, cancelAction);
+        notificationHelper.getManager().notify(2, builder.build());
+    }
+
     private void showNotification(String title, String body) {
         PendingIntent intent = PendingIntent.getActivity(getBaseContext(), 0, new Intent(), PendingIntent.FLAG_ONE_SHOT);
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationHelper notificationHelper = new NotificationHelper(getBaseContext());
         NotificationCompat.Builder builder = notificationHelper.getNotificationOldApi(title, body, intent, sound);
         notificationHelper.getManager().notify(1, builder.build());
+    }
+
+    private void showNotificationActions(String title, String body, String idClient) {
+        //ACEPTAR
+        Intent acceptIntent = new Intent(this, AcceptReceiver.class);
+        acceptIntent.putExtra("idClient", idClient);
+        PendingIntent acceptPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Action acceptAction = new NotificationCompat.Action.Builder(
+                R.mipmap.ic_launcher,
+                "Aceptar",
+                acceptPendingIntent
+        ).build();
+
+        //CANCELAR
+        Intent cancelIntent = new Intent(this, CancelReceiver.class);
+        cancelIntent.putExtra("idClient", idClient);
+        PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_CODE, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Action cancelAction = new NotificationCompat.Action.Builder(
+                R.mipmap.ic_launcher,
+                "Cancelar",
+                cancelPendingIntent
+        ).build();
+
+        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationHelper notificationHelper = new NotificationHelper(getBaseContext());
+        NotificationCompat.Builder builder = notificationHelper.getNotificationOldApiActions(title, body, sound, acceptAction, cancelAction);
+        notificationHelper.getManager().notify(2, builder.build());
     }
 }

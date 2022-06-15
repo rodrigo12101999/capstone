@@ -38,6 +38,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.upn.chapanomas.R;
 import com.upn.chapanomas.activitys.MainActivity;
 import com.upn.chapanomas.includes.MyToolbar;
@@ -66,6 +69,8 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
     private boolean conectado = false;
 
     private LatLng currentLatLng;
+
+    private ValueEventListener listener;
 
     LocationCallback locationCallback = new LocationCallback() {
         @Override
@@ -107,7 +112,7 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
         MyToolbar.show(this, "Conductor", false);
 
         authProovider = new AuthProovider();
-        geofireProvider = new GeofireProvider();
+        geofireProvider = new GeofireProvider("conductor_activo");
         tokenProvider = new TokenProvider();
 
         fusedLocation = LocationServices.getFusedLocationProviderClient(this);
@@ -128,6 +133,31 @@ public class MapConductorActivity extends AppCompatActivity implements OnMapRead
         });
 
         generateToken();
+        isDriverWorking();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(listener != null){
+            geofireProvider.isDriverWorking(authProovider.getId()).removeEventListener(listener);
+        }
+    }
+
+    public void isDriverWorking(){
+        listener = geofireProvider.isDriverWorking(authProovider.getId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    disconnect();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void updateLocation(){

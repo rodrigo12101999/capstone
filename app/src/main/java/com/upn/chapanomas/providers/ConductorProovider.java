@@ -25,4 +25,8 @@ public class ConductorProovider {
 
         return dataBase.child(conductor.getId()).setValue(map);
     }
+
+    public  DatabaseReference getDriver(String idDriver){
+        return dataBase.child(idDriver);
+    }
 }

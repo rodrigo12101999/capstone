@@ -1,5 +1,6 @@
 package com.upn.chapanomas.activitys.cliente;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -66,6 +67,8 @@ public class RequestDriverActivity extends AppCompatActivity {
     private ClientBookingProvider clientBookingProvider;
     private AuthProovider authProovider;
 
+    private ValueEventListener listener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +89,7 @@ public class RequestDriverActivity extends AppCompatActivity {
         OriginLatLng = new LatLng(ExtraOriginLat, ExtraOriginLng);
         DestinationLatLng = new LatLng(ExtraDestinationLat, ExtraDestinationLng);
 
-        geofireProvider = new GeofireProvider();
+        geofireProvider = new GeofireProvider("conductor_activo");
 
         notificationProvider = new NotificationProvider();
         tokenProvider = new TokenProvider();
@@ -183,8 +186,9 @@ public class RequestDriverActivity extends AppCompatActivity {
                     String token = snapshot.child("token").getValue().toString();
                     Map<String, String> map = new HashMap<>();
                     map.put("title", "Solicitud de servicio a " + time + " de tu posición");
-                    map.put("body","Un cliente esta solicitando un servicio a una distancia de " + km);
-                    FCMBody fcmBody = new FCMBody(token, "high", map);
+                    map.put("body","Un cliente esta solicitando un servicio a una distancia de " + km + "\n" + "Recoger en: " + ExtraOrigin + "\n" + "Destino: " + ExtraDestination);
+                    map.put("idClient", authProovider.getId());
+                    FCMBody fcmBody = new FCMBody(token, "high","4500s", map);
                     notificationProvider.sendNotification(fcmBody).enqueue(new Callback<FCMResponse>() {
                         @Override
                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
@@ -195,7 +199,7 @@ public class RequestDriverActivity extends AppCompatActivity {
                                     clientBookingProvider.create(clientBooking).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
-                                            Toast.makeText(RequestDriverActivity.this, "La petición se creo correctamente", Toast.LENGTH_SHORT).show();
+                                            checkStatusClientBooking();
                                         }
                                     });
                                 }else{
@@ -221,5 +225,39 @@ public class RequestDriverActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void checkStatusClientBooking(){
+        listener = clientBookingProvider.getStatus(authProovider.getId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String status = snapshot.getValue().toString();
+                    if(status.equals("accept")){
+                        Intent intent = new Intent(RequestDriverActivity.this, MapClientBookingActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else if(status.equals("cancel")){
+                        Toast.makeText(RequestDriverActivity.this, "Conductor no acepto el viaje", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(RequestDriverActivity.this, MapClientActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(listener != null){
+            clientBookingProvider.getStatus(authProovider.getId()).removeEventListener(listener);
+        }
     }
 }

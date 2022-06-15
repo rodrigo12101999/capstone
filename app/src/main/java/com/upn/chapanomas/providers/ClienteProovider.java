@@ -23,4 +23,8 @@ public class ClienteProovider {
 
         return dataBase.child(cliente.getId()).setValue(map);
     }
+
+    public DatabaseReference getClient(String idClient) {
+        return dataBase.child(idClient);
+    }
 }
