@@ -1,13 +1,14 @@
 package com.upn.chapanomas.activitys;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.upn.chapanomas.R;
 import com.upn.chapanomas.activitys.cliente.RegisterClienteActivity;
@@ -18,6 +19,8 @@ public class SelectOptionAuthActivity extends AppCompatActivity {
     Toolbar mToolbar;
     Button btnIrLogin;
     Button btnIrRegistro;
+
+    private TextView textViewTitulo;
 
     SharedPreferences pref;
 
@@ -34,6 +37,10 @@ public class SelectOptionAuthActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         btnIrLogin = findViewById(R.id.btnIrLogin);
+        textViewTitulo = findViewById(R.id.TituloOpcion);
+
+        textViewTitulo.setText("Apartado de " + pref.getString("usuario", ""));
+
         btnIrLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -5,32 +5,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorPrimary"
     tools:context=".activitys.LoginActivity">
-
-    <include layout="@layout/action_bar_toolbar"></include>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@drawable/icon_uber_clone"
-            android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="20dp"
-            android:contentDescription="@string/descripcion_logo" />
+        <io.github.florent37.shapeofview.shapes.ArcView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:elevation="4dp"
+            app:shape_arc_height="20dp"
+            app:shape_arc_position="bottom">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark" />
+
+            <TextView
+                android:id="@+id/tituloLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="50dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="100dp"
+                android:layout_marginBottom="20dp"
+                android:contentDescription="@string/descripcion_logo"
+                android:src="@drawable/icon_uber_clone" />
+
+        </io.github.florent37.shapeofview.shapes.ArcView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="10dp">
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="35dp"
@@ -59,8 +81,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="10dp">
+            android:layout_margin="20dp"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="35dp"
@@ -86,17 +108,28 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnIngresar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ingresar"
-            android:background="@drawable/rounded_button"
-            app:backgroundTint="@color/colorBlue"
-            android:layout_margin="30dp"
-            android:textColor="@color/white"
-            style="?android:attr/borderlessButtonStyle" />
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnIngresar"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:background="@drawable/rounded_button"
+        android:text="Ingresar"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/colorPrimaryDark"
+        android:layout_gravity="bottom"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleImageBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_arrow_back"
+        android:layout_gravity="left|top"
+        app:civ_circle_background_color="@color/white"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

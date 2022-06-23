@@ -39,4 +39,8 @@ public class ClientBookingProvider {
     public DatabaseReference getClientBooking(String idClientBooking){
         return database.child(idClientBooking);
     }
+
+    public Task<Void> delete(String idClientBooking){
+        return database.child(idClientBooking).removeValue();
+    }
 }

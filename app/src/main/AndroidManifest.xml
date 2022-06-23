@@ -5,6 +5,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -15,6 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChapaNomas"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".activitys.cliente.UpdateProfileActivity"
+            android:exported="false"
+            android:parentActivityName=".activitys.cliente.MapClientActivity"/>
+        <activity
+            android:name=".activitys.conductor.NotificationBookingActivity"
+            android:exported="false" />
         <activity
             android:name=".activitys.cliente.CalificationDriverActivity"
             android:exported="false" />

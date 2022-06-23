@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="15dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="250dp"
+            android:src="@drawable/icon_user"
+            android:scaleType="centerCrop"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre"
+                android:textColor="@color/colorBlue"
+                android:textSize="15sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp" />
+
+            <TextView
+                android:id="@+id/textViewName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rodrigo Garcia"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:maxLines="1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Origen"
+                android:textColor="@color/colorBlue"
+                android:textSize="15sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp" />
+
+            <TextView
+                android:id="@+id/textViewOrigin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Calle Falsa"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:maxLines="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Destimo"
+                android:textColor="@color/colorBlue"
+                android:textSize="15sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp" />
+
+            <TextView
+                android:id="@+id/textViewDestination"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Calle Falsa"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Calificaciòn"
+                android:textColor="@color/colorBlue"
+                android:textSize="15sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:maxLines="1"/>
+
+            <TextView
+                android:id="@+id/textViewCalification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:text="0"
+                android:textSize="16sp"
+                android:maxLines="1"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

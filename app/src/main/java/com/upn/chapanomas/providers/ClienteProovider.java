@@ -24,6 +24,14 @@ public class ClienteProovider {
         return dataBase.child(cliente.getId()).setValue(map);
     }
 
+    public Task<Void> update(Cliente cliente){
+        Map<String, Object> map = new HashMap<>();
+        map.put("nombre", cliente.getNombre());
+        map.put("image", cliente.getImage());
+
+        return dataBase.child(cliente.getId()).setValue(map);
+    }
+
     public DatabaseReference getClient(String idClient) {
         return dataBase.child(idClient);
     }

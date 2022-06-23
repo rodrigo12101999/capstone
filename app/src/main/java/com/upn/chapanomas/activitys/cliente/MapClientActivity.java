@@ -435,7 +435,7 @@ public class MapClientActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.conductor_menu, menu);
+        getMenuInflater().inflate(R.menu.client_menu, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -446,6 +446,11 @@ public class MapClientActivity extends AppCompatActivity implements OnMapReadyCa
         if(item.getItemId() == R.id.action_logout){
             logout();
         }
+
+        /*if(item.getItemId() == R.id.action_update){
+            Intent intent = new Intent(MapClientActivity.this, UpdateProfileActivity.class);
+            startActivity(intent);
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

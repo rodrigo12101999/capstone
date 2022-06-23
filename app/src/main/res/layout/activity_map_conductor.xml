@@ -24,7 +24,7 @@
         android:layout_margin="30dp"
         android:textColor="@color/white"
         android:background="@drawable/rounded_button"
-        android:backgroundTint="@color/colorPrimaryDark" />
+        app:backgroundTint="@color/colorPrimaryDark" />
 
 
 

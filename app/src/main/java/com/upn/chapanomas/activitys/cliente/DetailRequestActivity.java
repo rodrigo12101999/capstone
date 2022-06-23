@@ -23,7 +23,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.SquareCap;
 import com.upn.chapanomas.R;
-import com.upn.chapanomas.includes.MyToolbar;
 import com.upn.chapanomas.providers.GoogleAPIProvider;
 import com.upn.chapanomas.utils.DecodePoints;
 
@@ -32,6 +31,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,11 +65,12 @@ public class DetailRequestActivity extends AppCompatActivity implements OnMapRea
 
     private Button buttonRequest;
 
+    private CircleImageView circleImageBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_request);
-        MyToolbar.show(this, "Tus datos", true);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -93,6 +94,7 @@ public class DetailRequestActivity extends AppCompatActivity implements OnMapRea
         textTime = findViewById(R.id.textTime);
         textDistance = findViewById(R.id.textDistance);
         buttonRequest = findViewById(R.id.btnRequestNow);
+        circleImageBack = findViewById(R.id.circleImageBack);
 
         textOrigin.setText(ExtraOrigin);
         textDestination.setText(ExtraDestination);
@@ -101,6 +103,13 @@ public class DetailRequestActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View view) {
                 goToRequestDriver();
+            }
+        });
+
+        circleImageBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

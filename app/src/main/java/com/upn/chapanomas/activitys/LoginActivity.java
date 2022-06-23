@@ -1,14 +1,15 @@
 package com.upn.chapanomas.activitys;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,15 +21,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.upn.chapanomas.R;
 import com.upn.chapanomas.activitys.cliente.MapClientActivity;
 import com.upn.chapanomas.activitys.conductor.MapConductorActivity;
-import com.upn.chapanomas.includes.MyToolbar;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class LoginActivity extends AppCompatActivity {
 
     SharedPreferences pref;
 
-    TextInputEditText textInputEmail;
-    TextInputEditText textInputPassword;
-    Button btnLogin;
+    private TextInputEditText textInputEmail;
+    private TextInputEditText textInputPassword;
+    private Button btnLogin;
+    private CircleImageView circleImageBack;
+
+    private TextView textViewTituloLogin;
 
     FirebaseAuth auth;
     DatabaseReference dataBase;
@@ -40,11 +45,15 @@ public class LoginActivity extends AppCompatActivity {
 
         pref = getApplicationContext().getSharedPreferences("tipoUsuario", MODE_PRIVATE);
 
-        MyToolbar.show(this, "Login de " + pref.getString("usuario", ""), true);
-
         textInputEmail = findViewById(R.id.textInputEmail);
         textInputPassword = findViewById(R.id.textInputPassword);
         btnLogin = findViewById(R.id.btnIngresar);
+
+        circleImageBack = findViewById(R.id.circleImageBack);
+
+        textViewTituloLogin = findViewById(R.id.tituloLogin);
+
+        textViewTituloLogin.setText("LogIn ChapaNomas - " + pref.getString("usuario", ""));
 
         auth = FirebaseAuth.getInstance();
         dataBase = FirebaseDatabase.getInstance().getReference();
@@ -53,6 +62,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ingresar();
+            }
+        });
+
+        circleImageBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

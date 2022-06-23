@@ -3,6 +3,7 @@ package com.upn.chapanomas.activitys.cliente;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,7 +99,23 @@ public class RequestDriverActivity extends AppCompatActivity {
 
         googleAPIProvider = new GoogleAPIProvider(RequestDriverActivity.this);
 
+        btnCancelRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelRequest();
+            }
+        });
+
         getClosesDriver();
+    }
+
+    private void cancelRequest() {
+        clientBookingProvider.delete(authProovider.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                sendNotificationCancel();
+            }
+        });
     }
 
     private void getClosesDriver(){
@@ -178,6 +195,50 @@ public class RequestDriverActivity extends AppCompatActivity {
         });
     }
 
+    private void sendNotificationCancel(){
+        tokenProvider.getToken(idDriverFound).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String token = snapshot.child("token").getValue().toString();
+                    Map<String, String> map = new HashMap<>();
+                    map.put("title", "Viaje cancelado");
+                    map.put("body","El cliente cancelo la solicitud");
+                    FCMBody fcmBody = new FCMBody(token, "high","4500s", map);
+                    notificationProvider.sendNotification(fcmBody).enqueue(new Callback<FCMResponse>() {
+                        @Override
+                        public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                            if(response.body() != null){
+                                if(response.body().getSuccess() == 1){
+                                    Toast.makeText(RequestDriverActivity.this, "La solicitud se cancelo correctamente", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(RequestDriverActivity.this, MapClientActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }else{
+                                    Toast.makeText(RequestDriverActivity.this, "No se pudo enviar la notificación", Toast.LENGTH_SHORT).show();
+                                }
+                            }else{
+                                Toast.makeText(RequestDriverActivity.this, "No se pudo enviar la notificación", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<FCMResponse> call, Throwable t) {
+                            Log.d("Error", "Error: "+t.getMessage());
+                        }
+                    });
+                }else{
+                    Toast.makeText(RequestDriverActivity.this, "No se pudo enviar la notificación porque el conductor no tiene token de sesión", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void sendNotification(final String time, final String km){
         tokenProvider.getToken(idDriverFound).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -188,6 +249,10 @@ public class RequestDriverActivity extends AppCompatActivity {
                     map.put("title", "Solicitud de servicio a " + time + " de tu posición");
                     map.put("body","Un cliente esta solicitando un servicio a una distancia de " + km + "\n" + "Recoger en: " + ExtraOrigin + "\n" + "Destino: " + ExtraDestination);
                     map.put("idClient", authProovider.getId());
+                    map.put("origin", ExtraOrigin);
+                    map.put("destination", ExtraDestination);
+                    map.put("min", time);
+                    map.put("distance", km);
                     FCMBody fcmBody = new FCMBody(token, "high","4500s", map);
                     notificationProvider.sendNotification(fcmBody).enqueue(new Callback<FCMResponse>() {
                         @Override
